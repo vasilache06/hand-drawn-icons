@@ -46,7 +46,7 @@
     "@lucide/shared": "workspace:*",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/vue": "^8.1.0",
-    "@vitejs/plugin-vue": "^6.0.8",
+    "@vitejs/plugin-vue": "^6.0.9",
     "@vue/test-utils": "2.5.0",
     "rollup": "^4.63.1",
     "rollup-plugin-dts": "^6.5.1",
