@@ -74,8 +74,9 @@ async function writePlayground(): Promise<void> {
 function serve(): void {
   const server = http.createServer(async (request, response) => {
     const url = new URL(request.url ?? '/', `http://127.0.0.1:${PORT}`);
-    const relative = url.pathname === '/' ? '/index.html' : url.pathname;
-    const filePath = path.join(PREVIEW_DIR, path.normalize(relative).replace(/^(\.\.[/\\])+/, ''));
+    const relative = (url.pathname === '/' ? '/index.html' : url.pathname).replace(/^\/+/, '');
+    const filePath = path.resolve(PREVIEW_DIR, relative);
+    const ext = path.extname(url.pathname === '/' ? '/index.html' : url.pathname).toLowerCase();
 
     if (!filePath.startsWith(PREVIEW_DIR)) {
       response.writeHead(403);
@@ -85,7 +86,7 @@ function serve(): void {
 
     try {
       const data = await fs.readFile(filePath);
-      response.writeHead(200, { 'content-type': MIME[path.extname(filePath)] ?? 'application/octet-stream' });
+      response.writeHead(200, { 'content-type': MIME[ext] ?? 'application/octet-stream' });
       response.end(data);
     } catch {
       response.writeHead(404);

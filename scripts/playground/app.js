@@ -11,6 +11,7 @@ const state = {
   selected: 'bell',
   tab: 'react',
   gallery: 'icons',
+  lucideSearch: '',
   icons: [],
   placeholders: [],
 };
@@ -29,6 +30,16 @@ function toPascalCase(value) {
     .filter(Boolean)
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join('');
+}
+
+function toCamelCase(value) {
+  const pascal = toPascalCase(value);
+  return pascal ? pascal.charAt(0).toLowerCase() + pascal.slice(1) : 'asset';
+}
+
+function importIdentifier(value) {
+  const name = toCamelCase(value);
+  return /^[A-Za-z_$]/.test(name) ? name : `placeholder${toPascalCase(value)}`;
 }
 
 function num(value, fallback = 0) {
@@ -234,6 +245,36 @@ function formatNumber(value) {
   return Number.isInteger(value) ? String(value) : String(value);
 }
 
+function reactSnippet(kind, name = state.selected) {
+  const component = toPascalCase(name);
+
+  if (kind === 'lucide') {
+    return `import { ${component} } from 'lucide-react';
+
+<${component} />`;
+  }
+
+  if (kind === 'placeholder') {
+    const ident = importIdentifier(name);
+    return `import ${ident} from '../placeholder/${name}.svg';
+
+<img src={${ident}} alt="${name}" />`;
+  }
+
+  const roughness = formatNumber(state.roughness);
+  const gap = formatNumber(state.hachureGap);
+  const fill = state.fillStyle;
+
+  return `import { ${component} } from 'lucide-react';
+
+<${component}
+  color="${state.color}"
+  roughness={${roughness}}
+  hachureGap={${gap}}
+  fillStyle="${fill}"
+/>`;
+}
+
 function codeSnippet() {
   const component = toPascalCase(state.selected);
   const roughness = formatNumber(state.roughness);
@@ -257,20 +298,48 @@ function codeSnippet() {
     return `pnpm roughen -- --roughness ${roughness} --hachure-gap ${gap} --fill-style ${fill}`;
   }
 
-  return `import { ${component} } from 'lucide-react';
-
-<${component}
-  color="${state.color}"
-  roughness={${roughness}}
-  hachureGap={${gap}}
-  fillStyle="${fill}"
-/>`;
+  return reactSnippet('icons', state.selected);
 }
 
-function visibleIcons() {
-  const query = state.search.trim().toLowerCase();
-  const icons = query
-    ? state.icons.filter((icon) => icon.name.includes(query))
+let toastTimer = 0;
+
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 1600);
+}
+
+async function copyReactCode(kind, name) {
+  const snippet = reactSnippet(kind, name);
+  try {
+    await navigator.clipboard.writeText(snippet);
+  } catch {
+    const textarea = document.createElement('textarea');
+    textarea.value = snippet;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.left = '-9999px';
+    document.body.append(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    textarea.remove();
+  }
+  showToast('React code copied');
+}
+
+function markSelected(card) {
+  document.querySelectorAll('.card.selected').forEach((el) => el.classList.remove('selected'));
+  card.classList.add('selected');
+}
+
+function visibleIcons(query = state.search) {
+  const normalized = query.trim().toLowerCase();
+  const icons = normalized
+    ? state.icons.filter((icon) => icon.name.includes(normalized))
     : state.icons;
 
   return icons.slice().sort((a, b) => {
@@ -293,7 +362,7 @@ function renderGrid() {
   const token = ++paintToken;
   const grid = document.getElementById('grid');
   const icons = visibleIcons();
-  document.getElementById('count').textContent = `${icons.length} iconițe`;
+  document.getElementById('count').textContent = `${icons.length} icons`;
   grid.replaceChildren();
 
   let index = 0;
@@ -312,6 +381,7 @@ function renderGrid() {
       const article = document.createElement('article');
       article.className = `card${icon.name === state.selected ? ' selected' : ''}`;
       article.dataset.name = icon.name;
+      article.title = 'Click to copy React code';
       try {
         article.innerHTML = `${roughenSvg(icon.svg, icon.name)}<span class="label">${icon.name}</span>`;
       } catch {
@@ -337,17 +407,63 @@ function renderGrid() {
 function renderPlaceholders() {
   const grid = document.getElementById('placeholder-grid');
   const placeholders = state.placeholders;
-  document.getElementById('placeholder-count').textContent = `${placeholders.length} placeholdere`;
+  document.getElementById('placeholder-count').textContent = `${placeholders.length} placeholders`;
   grid.replaceChildren();
 
   const fragment = document.createDocumentFragment();
   for (const item of placeholders) {
     const article = document.createElement('article');
     article.className = 'card';
+    article.dataset.name = item.name;
+    article.title = 'Click to copy React code';
     article.innerHTML = `${item.svg}<span class="label">${item.name}</span>`;
     fragment.append(article);
   }
   grid.append(fragment);
+}
+
+let lucidePaintToken = 0;
+
+function renderLucideGrid() {
+  const token = ++lucidePaintToken;
+  const grid = document.getElementById('lucide-grid');
+  const icons = visibleIcons(state.lucideSearch);
+  document.getElementById('lucide-count').textContent = `${icons.length} Lucide icons`;
+  grid.replaceChildren();
+
+  let index = 0;
+  const batch = 48;
+
+  function paint() {
+    if (token !== lucidePaintToken) {
+      return;
+    }
+
+    const fragment = document.createDocumentFragment();
+    const end = Math.min(index + batch, icons.length);
+
+    for (; index < end; index += 1) {
+      const icon = icons[index];
+      const article = document.createElement('article');
+      article.className = 'card';
+      article.dataset.name = icon.name;
+      article.title = 'Click to copy React code';
+      article.innerHTML = `${icon.svg}<span class="label">${icon.name}</span>`;
+      article.style.color = state.color;
+      fragment.append(article);
+    }
+
+    if (token !== lucidePaintToken) {
+      return;
+    }
+
+    grid.append(fragment);
+    if (index < icons.length) {
+      requestAnimationFrame(paint);
+    }
+  }
+
+  paint();
 }
 
 function setGallery(gallery) {
@@ -356,6 +472,7 @@ function setGallery(gallery) {
     button.classList.toggle('active', button.dataset.gallery === gallery);
   });
   document.getElementById('icons-panel').hidden = gallery !== 'icons';
+  document.getElementById('lucide-panel').hidden = gallery !== 'lucide';
   document.getElementById('placeholders-panel').hidden = gallery !== 'placeholders';
 }
 
@@ -365,7 +482,9 @@ function bind() {
   const fill = document.getElementById('fill-style');
   const color = document.getElementById('color');
   const search = document.getElementById('search');
+  const lucideSearch = document.getElementById('lucide-search');
   let timer = 0;
+  let lucideTimer = 0;
 
   const schedule = () => {
     clearTimeout(timer);
@@ -393,19 +512,41 @@ function bind() {
     state.color = color.value;
     renderCode();
     document.getElementById('grid').style.color = state.color;
+    document.getElementById('lucide-grid').style.color = state.color;
   });
   search.addEventListener('input', () => {
     state.search = search.value;
     schedule();
+  });
+  lucideSearch.addEventListener('input', () => {
+    state.lucideSearch = lucideSearch.value;
+    clearTimeout(lucideTimer);
+    lucideTimer = setTimeout(renderLucideGrid, 40);
   });
 
   document.getElementById('grid').addEventListener('click', (event) => {
     const card = event.target.closest('.card');
     if (!card) return;
     state.selected = card.dataset.name;
-    document.querySelectorAll('.card.selected').forEach((el) => el.classList.remove('selected'));
-    card.classList.add('selected');
+    markSelected(card);
     renderCode();
+    void copyReactCode('icons', card.dataset.name);
+  });
+
+  document.getElementById('lucide-grid').addEventListener('click', (event) => {
+    const card = event.target.closest('.card');
+    if (!card) return;
+    state.selected = card.dataset.name;
+    markSelected(card);
+    void copyReactCode('lucide', card.dataset.name);
+  });
+
+  document.getElementById('placeholder-grid').addEventListener('click', (event) => {
+    const card = event.target.closest('.card');
+    if (!card) return;
+    state.selected = card.dataset.name;
+    markSelected(card);
+    void copyReactCode('placeholder', card.dataset.name);
   });
 
   document.querySelectorAll('[data-tab]').forEach((button) => {
@@ -424,9 +565,10 @@ function bind() {
 
   document.getElementById('copy').addEventListener('click', async () => {
     await navigator.clipboard.writeText(codeSnippet());
-    document.getElementById('copy').textContent = 'Copiat';
+    document.getElementById('copy').textContent = 'Copied';
+    showToast('React code copied');
     setTimeout(() => {
-      document.getElementById('copy').textContent = 'Copiază';
+      document.getElementById('copy').textContent = 'Copy';
     }, 1200);
   });
 }
@@ -444,4 +586,5 @@ if (!icons.some((icon) => icon.name === state.selected) && icons[0]) {
 bind();
 renderCode();
 renderGrid();
+renderLucideGrid();
 renderPlaceholders();

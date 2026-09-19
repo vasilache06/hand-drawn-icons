@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="ro">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1"
     />
-    <title>Lucide &amp; Moonlysoft</title>
+    <title>Lucide</title>
     <style>
       :root {
         --bg: #f6f3ee;
@@ -245,6 +245,32 @@
       .panel[hidden] {
         display: none !important;
       }
+      .hint {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 24px;
+        z-index: 20;
+        transform: translateX(-50%) translateY(12px);
+        opacity: 0;
+        pointer-events: none;
+        padding: 10px 16px;
+        border-radius: 999px;
+        background: var(--code);
+        color: #f4ece6;
+        font-size: 13px;
+        box-shadow: 0 8px 24px rgb(31 26 23 / 18%);
+        transition:
+          opacity 0.2s ease,
+          transform 0.2s ease;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
       @media (max-width: 900px) {
         .layout {
           grid-template-columns: 1fr;
@@ -261,8 +287,10 @@
   <body>
     <header class="hero">
       <p class="eyebrow">A new library of icons</p>
-      <h1>Lucide <span>&amp;</span> Moonlysoft</h1>
-      <p class="lede">Hand-drawn icons and placeholdere, ready to use in your projects.</p>
+      <h1>Lucide</h1>
+      <p class="lede">
+        Hand-drawn icons, Lucide icons, and placeholders, ready to use in your projects.
+      </p>
     </header>
 
     <nav class="gallery-tabs">
@@ -271,13 +299,19 @@
         data-gallery="icons"
         class="active"
       >
-        Iconițe
+        Icons
+      </button>
+      <button
+        type="button"
+        data-gallery="lucide"
+      >
+        Lucide
       </button>
       <button
         type="button"
         data-gallery="placeholders"
       >
-        Placeholdere
+        Placeholders
       </button>
     </nav>
 
@@ -298,9 +332,7 @@
           />
         </label>
         <label class="control">
-          <div class="control-top">
-            <b>Densitate hașuri</b><span id="hachure-gap-value">5</span>
-          </div>
+          <div class="control-top"><b>Hatch density</b><span id="hachure-gap-value">5</span></div>
           <input
             id="hachure-gap"
             type="range"
@@ -311,7 +343,7 @@
           />
         </label>
         <label class="control">
-          <div class="control-top"><b>Stil umplere</b></div>
+          <div class="control-top"><b>Fill style</b></div>
           <select id="fill-style">
             <option
               value="hachure"
@@ -328,7 +360,7 @@
           </select>
         </label>
         <label class="control">
-          <div class="control-top"><b>Culoare</b></div>
+          <div class="control-top"><b>Color</b></div>
           <div class="color-row">
             <input
               id="color"
@@ -366,7 +398,7 @@
             id="copy"
             type="button"
           >
-            Copiază
+            Copy
           </button>
         </div>
       </aside>
@@ -375,16 +407,42 @@
           <input
             id="search"
             type="search"
-            placeholder="Caută iconițe…"
+            placeholder="Search icons…"
           />
           <span
             class="count"
             id="count"
           ></span>
+          <span class="hint">Click an icon to copy React code</span>
         </div>
         <section
           class="grid"
           id="grid"
+        ></section>
+      </main>
+    </div>
+
+    <div
+      class="panel"
+      id="lucide-panel"
+      hidden
+    >
+      <main>
+        <div class="toolbar">
+          <input
+            id="lucide-search"
+            type="search"
+            placeholder="Search Lucide icons…"
+          />
+          <span
+            class="count"
+            id="lucide-count"
+          ></span>
+          <span class="hint">Click an icon to copy React code</span>
+        </div>
+        <section
+          class="grid"
+          id="lucide-grid"
         ></section>
       </main>
     </div>
@@ -400,6 +458,7 @@
             class="count"
             id="placeholder-count"
           ></span>
+          <span class="hint">Click a placeholder to copy React code</span>
         </div>
         <section
           class="grid placeholders"
@@ -407,6 +466,11 @@
         ></section>
       </main>
     </div>
+    <div
+      class="toast"
+      id="toast"
+      role="status"
+    ></div>
     <script
       type="module"
       src="./app.js"

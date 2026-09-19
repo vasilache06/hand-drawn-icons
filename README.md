@@ -1,8 +1,8 @@
 <p align="center">
 
 🚀
-- Link: http://localhost:4579/
-- Link2: https://www.magnific.com/ai/icon-generator/tool 
+- Playground: http://localhost:4578/
+- Link2: https://www.magnific.com/ai/icon-generator/tool
 - Link 3: https://www.npmjs.com/package/roughjs?activeTab=dependencies 
 
   <a href="https://github.com/lucide-icons/lucide#gh-light-mode-only">
@@ -33,6 +33,32 @@
 # Lucide
 
 Lucide is an open-source icon library that provides 1600+ vector (svg) files for displaying icons and symbols in digital and non-digital projects. The library aims to make it easier for designers and developers to incorporate icons into their projects by providing several official [packages](https://lucide.dev/packages) to make it easier to use these icons in your project.
+
+## Playground
+
+Preview hand-drawn icons, Lucide icons, and placeholders at **http://localhost:4578/**.
+
+1. Install dependencies:
+
+   ```sh
+   pnpm install
+   ```
+
+2. Start the playground (serves on port `4578` by default):
+
+   ```sh
+   pnpm roughen:play
+   ```
+
+3. Open [http://localhost:4578/](http://localhost:4578/) in the browser.
+
+To use another port in PowerShell:
+
+```powershell
+$env:PORT=3000; pnpm roughen:play
+```
+
+If `4578` is already in use, stop the existing process and run `pnpm roughen:play` again.
 
 ## Packages
 
