@@ -48,6 +48,8 @@ categories.json
 tags.json
 .vercel
 package-lock.json
+icons-original
+rough-preview
 
 # docs
 docs/.vitepress/cache

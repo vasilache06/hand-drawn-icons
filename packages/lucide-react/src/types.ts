@@ -17,6 +17,15 @@ export type IconNode = LucideIconNode[];
 
 type ElementAttributes = RefAttributes<SVGSVGElement> & SVGAttributes;
 
+export type RoughFillStyle =
+  | 'hachure'
+  | 'solid'
+  | 'zigzag'
+  | 'cross-hatch'
+  | 'dots'
+  | 'dashed'
+  | 'zigzag-line';
+
 export interface LucideProps extends ElementAttributes {
   size?: string | number;
   /**
@@ -24,6 +33,21 @@ export interface LucideProps extends ElementAttributes {
    */
   absoluteStrokeWidth?: boolean;
   nonScalingStroke?: boolean;
+  /**
+   * How wobbly the hand-drawn outline is.
+   * @default 0.5
+   */
+  roughness?: number;
+  /**
+   * Gap between hatch lines. Smaller is denser.
+   * @default 5
+   */
+  hachureGap?: number;
+  /**
+   * Fill pattern used for closed shapes.
+   * @default 'hachure'
+   */
+  fillStyle?: RoughFillStyle;
 }
 
 export type LucideIcon = ForwardRefExoticComponent<

@@ -1,9 +1,10 @@
 'use client';
 
-import { createElement, forwardRef } from 'react';
+import { createElement, forwardRef, useMemo } from 'react';
 import { buildLucideIconForReact, hasA11yProp, mergeClasses } from '@lucide/shared';
 import { LucideIconData, LucideIconNode, LucideProps } from './types';
 import { useLucideContext } from './context';
+import { roughenIconData } from './roughenIconNodes';
 
 type IconComponentProps = LucideProps &
   (
@@ -51,6 +52,9 @@ const Icon = forwardRef<SVGSVGElement, IconComponentProps>(
         aliases: [],
         size: 24,
       },
+      roughness: roughnessProp,
+      hachureGap: hachureGapProp,
+      fillStyle: fillStyleProp,
       ...rest
     },
     ref,
@@ -62,11 +66,28 @@ const Icon = forwardRef<SVGSVGElement, IconComponentProps>(
       nonScalingStroke: contextNonScalingStroke = false,
       color: contextColor = 'currentColor',
       className: contextClass = '',
+      roughness: contextRoughness = 0.5,
+      hachureGap: contextHachureGap = 5,
+      fillStyle: contextFillStyle = 'hachure',
     } = useLucideContext() ?? {};
+
+    const roughness = roughnessProp ?? contextRoughness;
+    const hachureGap = hachureGapProp ?? contextHachureGap;
+    const fillStyle = fillStyleProp ?? contextFillStyle;
+
+    const sketchedIcon = useMemo(
+      () =>
+        roughenIconData(icon, {
+          roughness,
+          hachureGap,
+          fillStyle,
+        }),
+      [icon, roughness, hachureGap, fillStyle],
+    );
 
     const hasAccessibleProp = Boolean(children) || hasA11yProp(rest);
 
-    const [name, svgAttributes, builtIconNode = []] = buildLucideIconForReact(icon, {
+    const [name, svgAttributes, builtIconNode = []] = buildLucideIconForReact(sketchedIcon, {
       color: color ?? contextColor,
       width: width ?? size ?? contextSize,
       height: height ?? size ?? contextSize,

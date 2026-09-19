@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hand-drawn icons playground</title>
+    <style>
+      :root {
+        --bg: #f6f3ee;
+        --ink: #5c4e44;
+        --muted: #9a8b80;
+        --line: #efe8e1;
+        --card: #ffffff;
+        --accent: #8d7a6b;
+        --code: #1f1a17;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; min-height: 100%; }
+      body {
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        min-height: 100vh;
+      }
+      aside {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: auto;
+        padding: 22px 20px 28px;
+        border-right: 1px solid var(--line);
+        background: #fbf9f6;
+      }
+      h1 {
+        margin: 0 0 6px;
+        font-size: 20px;
+      }
+      .lede {
+        margin: 0 0 20px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+      label.control {
+        display: block;
+        margin: 0 0 16px;
+      }
+      .control-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 6px;
+        font-size: 13px;
+      }
+      .control-top b { font-weight: 600; }
+      .control-top span {
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+      }
+      input[type="range"], select, input[type="search"], input[type="color"] {
+        width: 100%;
+      }
+      select, input[type="search"] {
+        border: 1px solid var(--line);
+        background: #fff;
+        border-radius: 10px;
+        padding: 8px 10px;
+        color: var(--ink);
+      }
+      .color-row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      input[type="color"] {
+        width: 42px;
+        height: 34px;
+        padding: 0;
+        border: 1px solid var(--line);
+        background: #fff;
+        border-radius: 8px;
+      }
+      .tabs {
+        display: flex;
+        gap: 6px;
+        margin: 18px 0 8px;
+      }
+      .tabs button {
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--muted);
+        border-radius: 999px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+      .tabs button.active {
+        color: var(--ink);
+        border-color: #d9cdc3;
+        background: #fff;
+        font-weight: 600;
+      }
+      .code-wrap {
+        position: relative;
+      }
+      pre {
+        margin: 0;
+        padding: 12px 12px 36px;
+        border-radius: 12px;
+        background: var(--code);
+        color: #f4ece6;
+        font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        overflow: auto;
+        white-space: pre-wrap;
+      }
+      .copy {
+        position: absolute;
+        right: 8px;
+        bottom: 8px;
+        border: 0;
+        border-radius: 8px;
+        padding: 5px 8px;
+        cursor: pointer;
+        background: #3a322e;
+        color: #f4ece6;
+      }
+      main { padding: 20px 24px 40px; }
+      .toolbar {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+      .toolbar input { max-width: 280px; }
+      .count { color: var(--muted); font-size: 13px; }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 14px;
+      }
+      .card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+        padding: 24px 12px 14px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        cursor: pointer;
+      }
+      .card.selected { outline: 2px solid #cbb7a7; }
+      .card svg {
+        width: 72px;
+        height: 72px;
+        overflow: visible;
+      }
+      .label {
+        font-size: 13px;
+        color: var(--muted);
+        border: 1px solid #e6ddd6;
+        border-radius: 999px;
+        padding: 2px 10px;
+        background: #fcfbf9;
+      }
+      @media (max-width: 900px) {
+        .layout { grid-template-columns: 1fr; }
+        aside { position: relative; height: auto; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <aside>
+        <h1>Hand-drawn icons</h1>
+        <p class="lede">Schimbă valorile live. Codul de mai jos e gata de copiat în proiect.</p>
+
+        <label class="control">
+          <div class="control-top"><b>Roughness</b><span id="roughness-value">0.5</span></div>
+          <input id="roughness" type="range" min="0" max="3" step="0.1" value="0.5" />
+        </label>
+        <label class="control">
+          <div class="control-top"><b>Densitate hașuri</b><span id="hachure-gap-value">5</span></div>
+          <input id="hachure-gap" type="range" min="1" max="16" step="0.5" value="5" />
+        </label>
+        <label class="control">
+          <div class="control-top"><b>Stil umplere</b></div>
+          <select id="fill-style">
+            <option value="hachure" selected>hachure</option>
+            <option value="solid">solid</option>
+            <option value="zigzag">zigzag</option>
+            <option value="cross-hatch">cross-hatch</option>
+            <option value="dots">dots</option>
+            <option value="dashed">dashed</option>
+            <option value="zigzag-line">zigzag-line</option>
+          </select>
+        </label>
+        <label class="control">
+          <div class="control-top"><b>Culoare</b></div>
+          <div class="color-row">
+            <input id="color" type="color" value="#8d7a6b" />
+          </div>
+        </label>
+
+        <div class="tabs">
+          <button type="button" data-tab="react" class="active">React</button>
+          <button type="button" data-tab="provider">Provider</button>
+          <button type="button" data-tab="cli">CLI</button>
+        </div>
+        <div class="code-wrap">
+          <pre id="code"></pre>
+          <button class="copy" id="copy" type="button">Copiază</button>
+        </div>
+      </aside>
+      <main>
+        <div class="toolbar">
+          <input id="search" type="search" placeholder="Caută iconițe…" />
+          <span class="count" id="count"></span>
+        </div>
+        <section class="grid" id="grid"></section>
+      </main>
+    </div>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

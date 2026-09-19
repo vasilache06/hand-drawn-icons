@@ -1,0 +1,12 @@
+{
+  "roughness": 0.5,
+  "hachureGap": 5,
+  "fillStyle": "hachure",
+  "bowing": 0.8,
+  "strokeWidth": 1.25,
+  "fillWeight": 1,
+  "hachureAngle": -45,
+  "disableMultiStroke": true,
+  "disableMultiStrokeFill": true,
+  "fixedDecimalPlaceDigits": 2
+}

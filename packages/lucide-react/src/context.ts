@@ -13,6 +13,9 @@ type LucideConfig = {
   absoluteStrokeWidth: boolean;
   nonScalingStroke: boolean;
   className: string;
+  roughness: number;
+  hachureGap: number;
+  fillStyle: LucideProps['fillStyle'];
 };
 
 const LucideContext = createContext<LucideProps>({});
@@ -29,6 +32,9 @@ export function LucideProvider({
   absoluteStrokeWidth,
   nonScalingStroke,
   className,
+  roughness,
+  hachureGap,
+  fillStyle,
 }: LucideProviderProps) {
   const value = useMemo(
     () => ({
@@ -38,8 +44,21 @@ export function LucideProvider({
       absoluteStrokeWidth,
       nonScalingStroke,
       className,
+      roughness,
+      hachureGap,
+      fillStyle,
     }),
-    [size, color, strokeWidth, absoluteStrokeWidth, nonScalingStroke, className],
+    [
+      size,
+      color,
+      strokeWidth,
+      absoluteStrokeWidth,
+      nonScalingStroke,
+      className,
+      roughness,
+      hachureGap,
+      fillStyle,
+    ],
   );
 
   return createElement(LucideContext.Provider, { value }, children);
