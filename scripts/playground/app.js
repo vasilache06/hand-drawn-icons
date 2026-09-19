@@ -265,7 +265,7 @@ function reactSnippet(kind, name = state.selected) {
   const gap = formatNumber(state.hachureGap);
   const fill = state.fillStyle;
 
-  return `import { ${component} } from 'lucide-react';
+  return `import { ${component} } from '@vmaria/hand-drawn-icons';
 
 <${component}
   color="${state.color}"
@@ -282,7 +282,7 @@ function codeSnippet() {
   const fill = state.fillStyle;
 
   if (state.tab === 'provider') {
-    return `import { LucideProvider, ${component} } from 'lucide-react';
+    return `import { LucideProvider, ${component} } from '@vmaria/hand-drawn-icons';
 
 <LucideProvider
   color="${state.color}"

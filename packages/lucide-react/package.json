@@ -1,28 +1,29 @@
 {
-  "name": "lucide-react",
-  "description": "A Lucide icon library package for React applications.",
-  "version": "0.0.1",
+  "name": "@vmaria/hand-drawn-icons",
+  "description": "Hand-drawn Lucide icons for React, with roughness, hatch, and fill controls.",
+  "version": "0.1.0",
   "license": "ISC",
-  "homepage": "https://lucide.dev",
-  "bugs": "https://github.com/lucide-icons/lucide/issues",
+  "homepage": "https://github.com/vasilache06/hand-drawn-icons#readme",
+  "bugs": "https://github.com/vasilache06/hand-drawn-icons/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lucide-icons/lucide.git",
+    "url": "https://github.com/vasilache06/hand-drawn-icons.git",
     "directory": "packages/lucide-react"
   },
   "keywords": [
-    "Lucide",
-    "React",
-    "Feather",
-    "Icons",
-    "Icon",
-    "SVG",
-    "Feather Icons",
-    "Fontawesome",
-    "Font Awesome"
+    "icons",
+    "react",
+    "hand-drawn",
+    "lucide",
+    "svg",
+    "rough",
+    "vmaria"
   ],
-  "author": "Eric Fennis",
-  "amdName": "lucide-react",
+  "author": "vmaria",
+  "publishConfig": {
+    "access": "public"
+  },
+  "amdName": "vmaria-hand-drawn-icons",
   "main": "dist/cjs/lucide-react.js",
   "module": "dist/esm/lucide-react.mjs",
   "typings": "dist/lucide-react.d.ts",

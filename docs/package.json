@@ -66,7 +66,7 @@
     "jszip": "^3.10.1",
     "lodash-es": "^4.18.1",
     "lucide": "workspace:*",
-    "lucide-react": "workspace:*",
+    "@vmaria/hand-drawn-icons": "workspace:*",
     "motion-v": "2.4.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",

@@ -10,7 +10,7 @@
     "check": "pnpm build && pnpm typecheck && pnpm test:browser"
   },
   "dependencies": {
-    "lucide-react": "workspace:*",
+    "@vmaria/hand-drawn-icons": "workspace:*",
     "next": "16.3.4",
     "react": "19.2.8",
     "react-dom": "19.2.8"

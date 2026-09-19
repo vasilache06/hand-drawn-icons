@@ -30,9 +30,21 @@
   <a href="https://lucide.dev/showcase">Showcase</a>
 </p>
 
-# Lucide
+# @vmaria/hand-drawn-icons
 
-Lucide is an open-source icon library that provides 1600+ vector (svg) files for displaying icons and symbols in digital and non-digital projects. The library aims to make it easier for designers and developers to incorporate icons into their projects by providing several official [packages](https://lucide.dev/packages) to make it easier to use these icons in your project.
+Hand-drawn Lucide icons for React, with roughness, hatch, and fill controls.
+
+## Install
+
+```sh
+npm install @vmaria/hand-drawn-icons
+```
+
+```jsx
+import { Bell } from '@vmaria/hand-drawn-icons';
+
+<Bell color="#8d7a6b" roughness={0.5} hachureGap={5} fillStyle="hachure" />
+```
 
 ## Playground
 
@@ -59,6 +71,34 @@ $env:PORT=3000; pnpm roughen:play
 ```
 
 If `4578` is already in use, stop the existing process and run `pnpm roughen:play` again.
+
+## Publish to npm
+
+The React package is `@vmaria/hand-drawn-icons`. Do not run `npm publish` from the repo root.
+
+1. Create the `@vmaria` organization on [npmjs.com](https://www.npmjs.com/) if it does not exist, and add your user to it.
+2. On npm, open **Access Tokens** and create a **Granular Access Token** with:
+   - Permission: **Read and write**
+   - **Bypass two-factor authentication (2FA)** enabled
+   - Packages and scopes: `@vmaria`
+3. In the terminal:
+
+   ```sh
+   npm login
+   ```
+
+   Or set the token:
+
+   ```powershell
+   $env:NPM_TOKEN="npm_your_token_here"
+   npm config set //registry.npmjs.org/:_authToken $env:NPM_TOKEN
+   ```
+
+4. Publish only the React package:
+
+   ```sh
+   pnpm publish:react
+   ```
 
 ## Packages
 
