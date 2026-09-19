@@ -10,7 +10,9 @@ const state = {
   search: '',
   selected: 'bell',
   tab: 'react',
+  gallery: 'icons',
   icons: [],
+  placeholders: [],
 };
 
 function seedFromName(name) {
@@ -332,6 +334,31 @@ function renderGrid() {
   paint();
 }
 
+function renderPlaceholders() {
+  const grid = document.getElementById('placeholder-grid');
+  const placeholders = state.placeholders;
+  document.getElementById('placeholder-count').textContent = `${placeholders.length} placeholdere`;
+  grid.replaceChildren();
+
+  const fragment = document.createDocumentFragment();
+  for (const item of placeholders) {
+    const article = document.createElement('article');
+    article.className = 'card';
+    article.innerHTML = `${item.svg}<span class="label">${item.name}</span>`;
+    fragment.append(article);
+  }
+  grid.append(fragment);
+}
+
+function setGallery(gallery) {
+  state.gallery = gallery;
+  document.querySelectorAll('[data-gallery]').forEach((button) => {
+    button.classList.toggle('active', button.dataset.gallery === gallery);
+  });
+  document.getElementById('icons-panel').hidden = gallery !== 'icons';
+  document.getElementById('placeholders-panel').hidden = gallery !== 'placeholders';
+}
+
 function bind() {
   const roughness = document.getElementById('roughness');
   const gap = document.getElementById('hachure-gap');
@@ -389,6 +416,12 @@ function bind() {
     });
   });
 
+  document.querySelectorAll('[data-gallery]').forEach((button) => {
+    button.addEventListener('click', () => {
+      setGallery(button.dataset.gallery);
+    });
+  });
+
   document.getElementById('copy').addEventListener('click', async () => {
     await navigator.clipboard.writeText(codeSnippet());
     document.getElementById('copy').textContent = 'Copiat';
@@ -398,8 +431,12 @@ function bind() {
   });
 }
 
-const icons = await fetch('./icons-data.json').then((response) => response.json());
+const [icons, placeholders] = await Promise.all([
+  fetch('./icons-data.json').then((response) => response.json()),
+  fetch('./placeholder-data.json').then((response) => response.json()).catch(() => []),
+]);
 state.icons = icons;
+state.placeholders = placeholders;
 if (!icons.some((icon) => icon.name === state.selected) && icons[0]) {
   state.selected = icons[0].name;
 }
@@ -407,3 +444,4 @@ if (!icons.some((icon) => icon.name === state.selected) && icons[0]) {
 bind();
 renderCode();
 renderGrid();
+renderPlaceholders();

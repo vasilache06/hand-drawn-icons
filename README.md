@@ -1,6 +1,9 @@
 <p align="center">
 
-🚀Link: http://localhost:4579/
+🚀
+- Link: http://localhost:4579/
+- Link2: https://www.magnific.com/ai/icon-generator/tool 
+- Link 3: https://www.npmjs.com/package/roughjs?activeTab=dependencies 
 
   <a href="https://github.com/lucide-icons/lucide#gh-light-mode-only">
     <img src="https://lucide.dev/lucide-logo-repo.svg#gh-light-mode-only" alt="Lucide - Beautiful & consistent icon toolkit made by the community. Open-source project and a fork of Feather Icons." width="480">

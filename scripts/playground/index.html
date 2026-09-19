@@ -2,8 +2,11 @@
 <html lang="ro">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Hand-drawn icons playground</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+    <title>Lucide &amp; Moonlysoft</title>
     <style>
       :root {
         --bg: #f6f3ee;
@@ -14,36 +17,80 @@
         --accent: #8d7a6b;
         --code: #1f1a17;
       }
-      * { box-sizing: border-box; }
-      html, body { margin: 0; min-height: 100%; }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+      }
       body {
         font-family: ui-sans-serif, system-ui, sans-serif;
         background: var(--bg);
         color: var(--ink);
       }
+      .hero {
+        padding: 36px 24px 20px;
+        text-align: center;
+      }
+      .eyebrow {
+        margin: 0 0 8px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .hero h1 {
+        margin: 0 0 10px;
+        font-size: clamp(28px, 5vw, 48px);
+        font-weight: 650;
+        letter-spacing: -0.03em;
+      }
+      .hero h1 span {
+        color: var(--accent);
+        font-weight: 500;
+      }
+      .hero .lede {
+        margin: 0 auto;
+        max-width: 520px;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.5;
+      }
+      .gallery-tabs {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        padding: 8px 24px 20px;
+      }
+      .gallery-tabs button {
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--muted);
+        border-radius: 999px;
+        padding: 8px 16px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+      .gallery-tabs button.active {
+        color: var(--ink);
+        border-color: #d9cdc3;
+        font-weight: 600;
+      }
       .layout {
         display: grid;
         grid-template-columns: 320px 1fr;
-        min-height: 100vh;
+        min-height: calc(100vh - 220px);
       }
       aside {
         position: sticky;
         top: 0;
-        height: 100vh;
+        height: calc(100vh - 0px);
         overflow: auto;
-        padding: 22px 20px 28px;
+        padding: 8px 20px 28px;
         border-right: 1px solid var(--line);
         background: #fbf9f6;
-      }
-      h1 {
-        margin: 0 0 6px;
-        font-size: 20px;
-      }
-      .lede {
-        margin: 0 0 20px;
-        color: var(--muted);
-        font-size: 13px;
-        line-height: 1.45;
       }
       label.control {
         display: block;
@@ -56,15 +103,21 @@
         margin-bottom: 6px;
         font-size: 13px;
       }
-      .control-top b { font-weight: 600; }
+      .control-top b {
+        font-weight: 600;
+      }
       .control-top span {
         color: var(--muted);
         font-variant-numeric: tabular-nums;
       }
-      input[type="range"], select, input[type="search"], input[type="color"] {
+      input[type='range'],
+      select,
+      input[type='search'],
+      input[type='color'] {
         width: 100%;
       }
-      select, input[type="search"] {
+      select,
+      input[type='search'] {
         border: 1px solid var(--line);
         background: #fff;
         border-radius: 10px;
@@ -76,7 +129,7 @@
         gap: 8px;
         align-items: center;
       }
-      input[type="color"] {
+      input[type='color'] {
         width: 42px;
         height: 34px;
         padding: 0;
@@ -100,7 +153,6 @@
       .tabs button.active {
         color: var(--ink);
         border-color: #d9cdc3;
-        background: #fff;
         font-weight: 600;
       }
       .code-wrap {
@@ -112,7 +164,12 @@
         border-radius: 12px;
         background: var(--code);
         color: #f4ece6;
-        font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font:
+          12px/1.5 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          Consolas,
+          monospace;
         overflow: auto;
         white-space: pre-wrap;
       }
@@ -127,19 +184,29 @@
         background: #3a322e;
         color: #f4ece6;
       }
-      main { padding: 20px 24px 40px; }
+      main {
+        padding: 8px 24px 40px;
+      }
       .toolbar {
         display: flex;
         gap: 12px;
         align-items: center;
         margin-bottom: 16px;
       }
-      .toolbar input { max-width: 280px; }
-      .count { color: var(--muted); font-size: 13px; }
+      .toolbar input {
+        max-width: 280px;
+      }
+      .count {
+        color: var(--muted);
+        font-size: 13px;
+      }
       .grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
         gap: 14px;
+      }
+      .grid.placeholders {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       }
       .card {
         display: flex;
@@ -152,11 +219,20 @@
         border-radius: 16px;
         cursor: pointer;
       }
-      .card.selected { outline: 2px solid #cbb7a7; }
-      .card svg {
+      .card.selected {
+        outline: 2px solid #cbb7a7;
+      }
+      .card svg,
+      .card img {
         width: 72px;
         height: 72px;
         overflow: visible;
+        object-fit: contain;
+      }
+      .placeholders .card svg,
+      .placeholders .card img {
+        width: 140px;
+        height: 140px;
       }
       .label {
         font-size: 13px;
@@ -166,30 +242,83 @@
         padding: 2px 10px;
         background: #fcfbf9;
       }
+      .panel[hidden] {
+        display: none !important;
+      }
       @media (max-width: 900px) {
-        .layout { grid-template-columns: 1fr; }
-        aside { position: relative; height: auto; }
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        aside {
+          position: relative;
+          height: auto;
+          border-right: 0;
+          border-top: 1px solid var(--line);
+        }
       }
     </style>
   </head>
   <body>
-    <div class="layout">
-      <aside>
-        <h1>Hand-drawn icons</h1>
-        <p class="lede">Schimbă valorile live. Codul de mai jos e gata de copiat în proiect.</p>
+    <header class="hero">
+      <p class="eyebrow">A new library of icons</p>
+      <h1>Lucide <span>&amp;</span> Moonlysoft</h1>
+      <p class="lede">Hand-drawn icons and placeholdere, ready to use in your projects.</p>
+    </header>
 
+    <nav class="gallery-tabs">
+      <button
+        type="button"
+        data-gallery="icons"
+        class="active"
+      >
+        Iconițe
+      </button>
+      <button
+        type="button"
+        data-gallery="placeholders"
+      >
+        Placeholdere
+      </button>
+    </nav>
+
+    <div
+      class="layout panel"
+      id="icons-panel"
+    >
+      <aside>
         <label class="control">
           <div class="control-top"><b>Roughness</b><span id="roughness-value">0.5</span></div>
-          <input id="roughness" type="range" min="0" max="3" step="0.1" value="0.5" />
+          <input
+            id="roughness"
+            type="range"
+            min="0"
+            max="3"
+            step="0.1"
+            value="0.5"
+          />
         </label>
         <label class="control">
-          <div class="control-top"><b>Densitate hașuri</b><span id="hachure-gap-value">5</span></div>
-          <input id="hachure-gap" type="range" min="1" max="16" step="0.5" value="5" />
+          <div class="control-top">
+            <b>Densitate hașuri</b><span id="hachure-gap-value">5</span>
+          </div>
+          <input
+            id="hachure-gap"
+            type="range"
+            min="1"
+            max="16"
+            step="0.5"
+            value="5"
+          />
         </label>
         <label class="control">
           <div class="control-top"><b>Stil umplere</b></div>
           <select id="fill-style">
-            <option value="hachure" selected>hachure</option>
+            <option
+              value="hachure"
+              selected
+            >
+              hachure
+            </option>
             <option value="solid">solid</option>
             <option value="zigzag">zigzag</option>
             <option value="cross-hatch">cross-hatch</option>
@@ -201,28 +330,86 @@
         <label class="control">
           <div class="control-top"><b>Culoare</b></div>
           <div class="color-row">
-            <input id="color" type="color" value="#8d7a6b" />
+            <input
+              id="color"
+              type="color"
+              value="#8d7a6b"
+            />
           </div>
         </label>
 
         <div class="tabs">
-          <button type="button" data-tab="react" class="active">React</button>
-          <button type="button" data-tab="provider">Provider</button>
-          <button type="button" data-tab="cli">CLI</button>
+          <button
+            type="button"
+            data-tab="react"
+            class="active"
+          >
+            React
+          </button>
+          <button
+            type="button"
+            data-tab="provider"
+          >
+            Provider
+          </button>
+          <button
+            type="button"
+            data-tab="cli"
+          >
+            CLI
+          </button>
         </div>
         <div class="code-wrap">
           <pre id="code"></pre>
-          <button class="copy" id="copy" type="button">Copiază</button>
+          <button
+            class="copy"
+            id="copy"
+            type="button"
+          >
+            Copiază
+          </button>
         </div>
       </aside>
       <main>
         <div class="toolbar">
-          <input id="search" type="search" placeholder="Caută iconițe…" />
-          <span class="count" id="count"></span>
+          <input
+            id="search"
+            type="search"
+            placeholder="Caută iconițe…"
+          />
+          <span
+            class="count"
+            id="count"
+          ></span>
         </div>
-        <section class="grid" id="grid"></section>
+        <section
+          class="grid"
+          id="grid"
+        ></section>
       </main>
     </div>
-    <script type="module" src="./app.js"></script>
+
+    <div
+      class="panel"
+      id="placeholders-panel"
+      hidden
+    >
+      <main>
+        <div class="toolbar">
+          <span
+            class="count"
+            id="placeholder-count"
+          ></span>
+        </div>
+        <section
+          class="grid placeholders"
+          id="placeholder-grid"
+        ></section>
+      </main>
+    </div>
+    <script
+      type="module"
+      src="./app.js"
+    ></script>
   </body>
 </html>

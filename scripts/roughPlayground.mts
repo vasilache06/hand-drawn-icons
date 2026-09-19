@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import http from 'http';
 import path from 'path';
+import { convertPlaceholders } from './convertPlaceholders.mts';
 import { getCurrentDirPath, readSvgDirectory } from '../tools/build-helpers/helpers.ts';
 
 const currentDir = getCurrentDirPath(import.meta.url);
@@ -50,7 +51,14 @@ async function writePlayground(): Promise<void> {
     })),
   );
 
+  const placeholders = await convertPlaceholders();
+
   await fs.writeFile(path.join(PREVIEW_DIR, 'icons-data.json'), JSON.stringify(icons), 'utf-8');
+  await fs.writeFile(
+    path.join(PREVIEW_DIR, 'placeholder-data.json'),
+    JSON.stringify(placeholders.map(({ name, svg }) => ({ name, svg }))),
+    'utf-8',
+  );
   await fs.copyFile(path.join(PLAYGROUND_SRC, 'index.html'), path.join(PREVIEW_DIR, 'index.html'));
   await fs.copyFile(path.join(PLAYGROUND_SRC, 'app.js'), path.join(PREVIEW_DIR, 'app.js'));
   await fs.copyFile(
@@ -58,7 +66,9 @@ async function writePlayground(): Promise<void> {
     path.join(PREVIEW_DIR, 'rough.esm.js'),
   );
 
-  console.log(`Playground assets written to ${PREVIEW_DIR} (${icons.length} icons)`);
+  console.log(
+    `Playground assets written to ${PREVIEW_DIR} (${icons.length} icons, ${placeholders.length} placeholders)`,
+  );
 }
 
 function serve(): void {
