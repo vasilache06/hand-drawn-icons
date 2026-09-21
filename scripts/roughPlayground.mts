@@ -56,7 +56,7 @@ async function writePlayground(): Promise<void> {
   await fs.writeFile(path.join(PREVIEW_DIR, 'icons-data.json'), JSON.stringify(icons), 'utf-8');
   await fs.writeFile(
     path.join(PREVIEW_DIR, 'placeholder-data.json'),
-    JSON.stringify(placeholders.map(({ name, svg }) => ({ name, svg }))),
+    JSON.stringify(placeholders.map(({ name, source, svg }) => ({ name, source, svg }))),
     'utf-8',
   );
   await fs.copyFile(path.join(PLAYGROUND_SRC, 'index.html'), path.join(PREVIEW_DIR, 'index.html'));

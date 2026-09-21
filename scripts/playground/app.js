@@ -256,7 +256,9 @@ function reactSnippet(kind, name = state.selected) {
 
   if (kind === 'placeholder') {
     const ident = importIdentifier(name);
-    return `import ${ident} from '../placeholder/${name}.svg';
+    const item = state.placeholders.find((placeholder) => placeholder.name === name);
+    const fileName = item?.source?.toLowerCase().endsWith('.svg') ? item.source : `${name}.svg`;
+    return `import ${ident} from '../placeholder/${fileName}';
 
 <img src={${ident}} alt="${name}" />`;
   }

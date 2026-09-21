@@ -48,15 +48,27 @@ function pngToSvg(buffer: Buffer): string {
 }
 
 export async function convertPlaceholders(): Promise<PlaceholderAsset[]> {
-  const files = (await fs.readdir(PLACEHOLDER_DIR))
-    .filter((fileName) => fileName.toLowerCase().endsWith('.png'))
-    .sort();
+  const files = await fs.readdir(PLACEHOLDER_DIR);
+  const svgFiles = files.filter((fileName) => fileName.toLowerCase().endsWith('.svg')).sort();
+  const pngFiles = files.filter((fileName) => fileName.toLowerCase().endsWith('.png')).sort();
 
   const used = new Set<string>();
   const assets: PlaceholderAsset[] = [];
 
-  for (const fileName of files) {
+  for (const fileName of svgFiles) {
     const name = uniqueName(used, slugify(fileName));
+    const source = path.join(PLACEHOLDER_DIR, fileName);
+    const svg = await fs.readFile(source, 'utf-8');
+    assets.push({ name, source: fileName, svg });
+  }
+
+  for (const fileName of pngFiles) {
+    const base = slugify(fileName);
+    if (used.has(base)) {
+      continue;
+    }
+
+    const name = uniqueName(used, base);
     const source = path.join(PLACEHOLDER_DIR, fileName);
     const buffer = await fs.readFile(source);
     const svg = pngToSvg(buffer);
@@ -66,6 +78,7 @@ export async function convertPlaceholders(): Promise<PlaceholderAsset[]> {
     console.log(`Converted ${fileName} → ${name}.svg`);
   }
 
+  assets.sort((a, b) => a.name.localeCompare(b.name));
   return assets;
 }
 
